@@ -14,8 +14,6 @@ After completing this topic, you will have the following:
 
 1. A BOSH Director instance
 
-1. A bastion instance
-
 1. A set of randomly generated BOSH Director credentials
 
 1. A generated key pair that allows you to SSH into the BOSH Director and any instances that BOSH deploys
@@ -54,7 +52,7 @@ Perform the following steps to download the required dependencies for bosh-bootl
         $ sudo mv ~/Downloads/bbl-* /usr/local/bin/bbl
         </pre>
 
-1. Download and install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest). Azure CLI 2.0 is highly recommended, try to avoid use Azure CLI 1.0.
+1. Download and install the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest). 
 
 ## <a id='create-service-principal'></a> Step 2: Create a Service Principal
 
@@ -93,7 +91,7 @@ Perform the following steps to create the service principal that bosh-bootloader
 		"appId": "YOUR-CLIENT-ID",
 		"displayName": "YOUR-SERVICE-PRINCIPAL-DISPLAY-NAME",
 		"name": "YOUR-SERVICE-PRINCIPAL-NAME",
-		"password": "YOUR-AZURE-CLIENT-SECRET",
+		"password": "YOUR-CLIENT-SECRET",
 		"tenant": "YOUR-TENANT-ID"
 	}
 	</pre>
@@ -101,10 +99,10 @@ Perform the following steps to create the service principal that bosh-bootloader
 	
 	<p class="note"><strong>Note</strong>: The service principal created above has default role <strong>Contributor</strong>. You may need more precise access control. Please refer to the <a href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest">doc</a>
 
-## <a id="create-infra-bosh"></a> Step 3: Create Infrastructure, Bastion, BOSH Director, and Application Gateway
+## <a id="create-infra-bosh"></a> Step 3: Create Infrastructure, BOSH Director, and Application Gateway
 
 Run the following command to create the required infrastructure,
-deploy a bastion, deploy a BOSH director and create application gateway
+deploy a BOSH director and create application gateway
 for Cloud Foundry:
 <pre class="terminal">
 $ bbl plan \
@@ -156,8 +154,7 @@ CA certificate and key with a tool such as [certstrap](https://github.com/square
 
 ## <a id='update-dns'></a> Step 4: Update DNS Records
 
-The `--lb-*` flags create a NS record in Azure's DNS Zone. You can view
-this record by navigating to the resource group created by BBL and selecting DNS Zone in the resource list.
+If the flag "--lb-domain" is specified, bbl will create Azure DNS Zone in your resource group. You can view the records in the zone.
 
 The name servers will have the following format:
 
@@ -195,7 +192,7 @@ $ bbl up
 </pre>
 
 
-To delete the infrastructure, bastion, director, and load balancers:
+To delete the infrastructure, director, and load balancers:
 
 <pre class="terminal">
 $ bbl destroy
